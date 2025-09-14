@@ -1,46 +1,46 @@
 @echo off
-echo 🚀 Setting up AI Real Estate Generator with OpenRouter + DeepSeek Chat
-echo =================================================================
+echo *** Setting up AI Real Estate Generator with OpenRouter + DeepSeek Chat ***
+echo =======================================================================
 echo.
 
 REM Check if virtual environment exists
 if not exist "venv" (
-    echo 📦 Creating virtual environment...
+    echo [*] Creating virtual environment...
     python -m venv venv
 )
 
 REM Activate virtual environment
-echo 🔧 Activating virtual environment...
+echo [*] Activating virtual environment...
 call venv\Scripts\activate
 
 REM Install dependencies
-echo 📥 Installing dependencies...
+echo [*] Installing dependencies...
 pip install -r requirements.txt
 
 REM Setup .env file
 if not exist ".env" (
-    echo 📝 Creating .env file from template...
+    echo [*] Creating .env file from template...
     copy env_example.txt .env
-    echo ⚠️  Please edit the .env file and add your OpenRouter API key!
+    echo [!] Please edit the .env file and add your OpenRouter API key!
     echo    Get your key from: https://openrouter.ai/
 ) else (
-    echo ✅ .env file already exists
+    echo [OK] .env file already exists
 )
 
 REM Check if API key is set
 if "%API_KEY_OPENROUTER%"=="" (
-    echo ⚠️  API_KEY_OPENROUTER environment variable not set!
+    echo [!] API_KEY_OPENROUTER environment variable not set!
     echo Please:
     echo 1. Edit the .env file with your actual API key
     echo 2. Or set it manually: set API_KEY_OPENROUTER=your-key
     echo.
     echo Get your API key from: https://openrouter.ai/
 ) else (
-    echo ✅ API_KEY_OPENROUTER is set
+    echo [OK] API_KEY_OPENROUTER is set
 )
 
 echo.
-echo 🎯 Setup complete! You can now:
+echo [*] Setup complete! You can now:
 echo 1. Run basic tests: python test_basic.py
 echo 2. Test OpenRouter: python test_openrouter.py
 echo 3. Test environment: python test_env.py
