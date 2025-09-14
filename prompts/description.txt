@@ -1,0 +1,61 @@
+{% if language == 'pt' %}
+Gere uma descrição rica e detalhada da propriedade (500-700 caracteres) que teça todas as características principais em uma narrativa envolvente sobre o imóvel.
+
+Dados da propriedade:
+- Tipo: Apartamento T{{ features.bedrooms }}
+- Área: {{ features.area }} m²
+- Preço: €{{ price }}
+- Localização: {{ location.neighborhood }}, {{ location.city }}{% if location.region %}, {{ location.region }}{% endif %}
+- País: {{ location.country }}
+
+Características disponíveis:
+{% if features.bedrooms > 0 %}- {{ features.bedrooms }} quartos espaçosos{% endif %}
+{% if features.get('bathrooms', 0) > 0 %}- {{ features.get('bathrooms', 0) }} casas de banho{% endif %}
+{% if features.area > 0 %}- Área total de {{ features.area }} m²{% endif %}
+{% if features.get('balcony', False) %}- Varanda privada perfeita para desfrutar de dias ensolarados{% endif %}
+{% if features.get('elevator', False) %}- Acesso por elevador para conveniência diária{% endif %}
+{% if features.get('parking', False) %}- Estacionamento privativo incluído{% endif %}
+{% if features.get('year_built') %}- Construído em {{ features.get('year_built') }}{% endif %}
+{% if features.get('furnished', False) %}- Mobilado e pronto para habitar{% endif %}
+{% if features.get('garden', False) %}- Jardim privativo para momentos de lazer{% endif %}
+
+A descrição deve:
+- Ser uma narrativa fluida e envolvente
+- Focar nos benefícios e estilo de vida, não apenas características
+- Incluir palavras-chave SEO naturais (apartamento à venda em {{ location.neighborhood }}, imóvel em {{ location.city }})
+- Manter tom profissional mas acessível
+- Ser precisa e baseada apenas nos dados fornecidos
+- Ter entre 500-700 caracteres
+
+Gere apenas a descrição, sem explicações adicionais.
+{% else %}
+Generate a rich, detailed property description (500-700 characters) that weaves all key features into a compelling narrative about the property.
+
+Property data:
+- Type: {{ features.bedrooms }}-Bedroom Apartment
+- Area: {{ features.area }} sqm
+- Price: €{{ price }}
+- Location: {{ location.neighborhood }}, {{ location.city }}{% if location.region %}, {{ location.region }}{% endif %}
+- Country: {{ location.country }}
+
+Available features:
+{% if features.bedrooms > 0 %}- {{ features.bedrooms }} spacious bedrooms{% endif %}
+{% if features.get('bathrooms', 0) > 0 %}- {{ features.get('bathrooms', 0) }} bathrooms{% endif %}
+{% if features.area > 0 %}- Total area of {{ features.area }} sqm{% endif %}
+{% if features.get('balcony', False) %}- Private balcony perfect for enjoying sunny days{% endif %}
+{% if features.get('elevator', False) %}- Elevator access for daily convenience{% endif %}
+{% if features.get('parking', False) %}- Private parking included{% endif %}
+{% if features.get('year_built') %}- Built in {{ features.get('year_built') }}{% endif %}
+{% if features.get('furnished', False) %}- Furnished and move-in ready{% endif %}
+{% if features.get('garden', False) %}- Private garden for leisure moments{% endif %}
+
+The description should:
+- Be a fluid, engaging narrative
+- Focus on benefits and lifestyle, not just features
+- Include natural SEO keywords (apartment for sale in {{ location.neighborhood }}, property in {{ location.city }})
+- Maintain a professional yet accessible tone
+- Be accurate and based only on provided data
+- Be 500-700 characters long
+
+Generate only the description, no additional explanations.
+{% endif %}

@@ -1,0 +1,45 @@
+{% if language == 'pt' %}
+Gere um call-to-action curto e direto que incentive o usuário a dar o próximo passo na compra ou aluguel da propriedade.
+
+Dados da propriedade:
+- Tipo: Apartamento T{{ features.bedrooms }}
+- Preço: €{{ price }}
+- Localização: {{ location.neighborhood }}, {{ location.city }}
+
+O call-to-action deve:
+- Ser uma frase curta e impactante
+- Incentivar ação imediata (agendar visita, contactar, etc.)
+- Criar urgência ou interesse
+- Ser profissional e confiável
+- Ter entre 50-100 caracteres
+- Usar linguagem persuasiva e positiva
+
+Exemplos possíveis:
+- Agende já a sua visita e conheça o seu novo lar!
+- Contacte-nos hoje para marcar uma visita exclusiva.
+- Não perca esta oportunidade única!
+
+IMPORTANTE: Gere apenas o texto do call-to-action, SEM comillas, sem explicações adicionais ou pontuação extra.
+{% else %}
+Generate a short, direct call-to-action that encourages the user to take the next step in purchasing or renting the property.
+
+Property data:
+- Type: {{ features.bedrooms }}-Bedroom Apartment
+- Price: €{{ price }}
+- Location: {{ location.neighborhood }}, {{ location.city }}
+
+The call-to-action should:
+- Be a short, impactful sentence
+- Encourage immediate action (schedule visit, contact, etc.)
+- Create urgency or interest
+- Be professional and trustworthy
+- Be 50-100 characters long
+- Use persuasive and positive language
+
+Possible examples:
+- Schedule your visit today and discover your new home!
+- Contact us today to arrange an exclusive viewing.
+- Don't miss this unique opportunity!
+
+IMPORTANT: Generate only the call-to-action text, WITHOUT quotes, no additional explanations or extra punctuation.
+{% endif %}

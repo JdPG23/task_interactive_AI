@@ -1,0 +1,43 @@
+{% if language == 'pt' %}
+Gere um headline H1 envolvente e persuasivo para a página do anúncio imobiliário. Deve destacar o ponto de venda principal da propriedade e ser cativante.
+
+Dados da propriedade:
+- Tipo: Apartamento T{{ features.bedrooms }}
+- Área: {{ features.area }} m²
+- Preço: €{{ price }}
+- Localização: {{ location.neighborhood }}, {{ location.city }}
+{% if features.get('balcony', False) %}- Varanda privada{% endif %}
+{% if features.get('elevator', False) %}- Com elevador{% endif %}
+{% if features.get('parking', False) %}- Estacionamento incluído{% endif %}
+{% if features.get('year_built') %}- Construído em {{ features.get('year_built') }}{% endif %}
+
+O headline deve:
+- Ser único e memorável
+- Focar nos benefícios e estilo de vida
+- Incluir palavras-chave naturais
+- Ser persuasivo e profissional
+- Ter entre 30-80 caracteres
+
+IMPORTANTE: Gere apenas o texto do headline, SEM comillas, sem explicações adicionais.
+{% else %}
+Generate an engaging and persuasive H1 headline for the property listing page. It should highlight the main selling point and be captivating.
+
+Property data:
+- Type: {{ features.bedrooms }}-Bedroom Apartment
+- Area: {{ features.area }} sqm
+- Price: €{{ price }}
+- Location: {{ location.neighborhood }}, {{ location.city }}
+{% if features.get('balcony', False) %}- Private balcony{% endif %}
+{% if features.get('elevator', False) %}- With elevator{% endif %}
+{% if features.get('parking', False) %}- Parking included{% endif %}
+{% if features.get('year_built') %}- Built in {{ features.get('year_built') }}{% endif %}
+
+The headline should:
+- Be unique and memorable
+- Focus on benefits and lifestyle
+- Include natural keywords
+- Be persuasive and professional
+- Be 30-80 characters long
+
+IMPORTANT: Generate only the headline text, WITHOUT quotes, no additional explanations.
+{% endif %}

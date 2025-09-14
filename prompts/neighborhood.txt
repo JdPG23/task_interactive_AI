@@ -1,0 +1,45 @@
+{% if language == 'pt' %}
+Gere uma descrição envolvente do bairro e localização da propriedade, focando no estilo de vida, charme e amenidades para vender a localização tanto quanto o imóvel.
+
+Dados da localização:
+- Bairro: {{ location.neighborhood }}
+- Cidade: {{ location.city }}{% if location.region %}
+- Região: {{ location.region }}{% endif %}
+- País: {{ location.country }}
+
+A descrição deve:
+- Ser um parágrafo único e fluido
+- Destacar as vantagens de viver neste bairro
+- Mencionar amenidades próximas (lojas, restaurantes, transportes, etc.)
+- Criar uma sensação de comunidade e qualidade de vida
+- Incluir palavras-chave SEO naturais (imóveis em {{ location.neighborhood }}, apartamentos à venda em {{ location.city }})
+- Ser persuasiva e focar nos benefícios do estilo de vida
+- Ter tom profissional e confiável
+- Ter entre 200-400 caracteres
+
+Baseie a descrição em conhecimento geral sobre o bairro, mas mantenha-a realista e não invente amenidades que não existam tipicamente. Foque nos aspectos positivos e atrativos da localização.
+
+Gere apenas a descrição do bairro, sem explicações adicionais.
+{% else %}
+Generate an engaging description of the property's neighborhood and location, focusing on lifestyle, charm, and amenities to sell the location as much as the property itself.
+
+Location data:
+- Neighborhood: {{ location.neighborhood }}
+- City: {{ location.city }}{% if location.region %}
+- Region: {{ location.region }}{% endif %}
+- Country: {{ location.country }}
+
+The description should:
+- Be a single, fluid paragraph
+- Highlight the advantages of living in this neighborhood
+- Mention nearby amenities (shops, restaurants, transport, etc.)
+- Create a sense of community and quality of life
+- Include natural SEO keywords (properties in {{ location.neighborhood }}, apartments for sale in {{ location.city }})
+- Be persuasive and focus on lifestyle benefits
+- Maintain a professional and trustworthy tone
+- Be 200-400 characters long
+
+Base the description on general knowledge about the neighborhood, but keep it realistic and don't invent amenities that don't typically exist. Focus on the positive and attractive aspects of the location.
+
+Generate only the neighborhood description, no additional explanations.
+{% endif %}

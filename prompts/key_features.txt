@@ -1,0 +1,53 @@
+{% if language == 'pt' %}
+Gere uma lista HTML de 3-5 características principais de alto impacto da propriedade. Cada item deve ser conciso e persuasivo.
+
+Características disponíveis:
+{% if features.bedrooms > 0 %}- {{ features.bedrooms }} quartos espaçosos e bem iluminados{% endif %}
+{% if features.get('bathrooms', 0) > 0 %}- {{ features.get('bathrooms', 0) }} casas de banho modernas{% endif %}
+{% if features.area > 0 %}- Área total de {{ features.area }} m²{% endif %}
+{% if features.get('balcony', False) %}- Varanda privada com vista{% endif %}
+{% if features.get('elevator', False) %}- Elevador para acesso conveniente{% endif %}
+{% if features.get('parking', False) %}- Estacionamento privativo incluído{% endif %}
+{% if features.get('year_built') %}- Construído em {{ features.get('year_built') }}{% endif %}
+{% if features.get('furnished', False) %}- Totalmente mobilado{% endif %}
+{% if features.get('garden', False) %}- Jardim privativo{% endif %}
+
+Instruções:
+- Gere apenas os elementos <li> da lista (não incluir <ul>)
+- Cada item deve ser uma frase completa começando com maiúscula
+- Focar nos benefícios e vantagens
+- Usar linguagem persuasiva e profissional
+- Incluir apenas características verdadeiras do imóvel
+- Limitar a 3-5 itens mais relevantes
+
+Exemplo de saída:
+<li>Quartos espaçosos com excelente iluminação natural</li>
+<li>Varanda privada perfeita para momentos de relaxamento</li>
+<li>Estacionamento privativo para máxima conveniência</li>
+{% else %}
+Generate an HTML list of 3-5 key high-impact features of the property. Each item should be concise and persuasive.
+
+Available features:
+{% if features.bedrooms > 0 %}- {{ features.bedrooms }} spacious and well-lit bedrooms{% endif %}
+{% if features.get('bathrooms', 0) > 0 %}- {{ features.get('bathrooms', 0) }} modern bathrooms{% endif %}
+{% if features.area > 0 %}- Total area of {{ features.area }} sqm{% endif %}
+{% if features.get('balcony', False) %}- Private balcony with views{% endif %}
+{% if features.get('elevator', False) %}- Elevator for convenient access{% endif %}
+{% if features.get('parking', False) %}- Private parking included{% endif %}
+{% if features.get('year_built') %}- Built in {{ features.get('year_built') }}{% endif %}
+{% if features.get('furnished', False) %}- Fully furnished{% endif %}
+{% if features.get('garden', False) %}- Private garden{% endif %}
+
+Instructions:
+- Generate only the <li> elements (do not include <ul>)
+- Each item should be a complete sentence starting with capital letter
+- Focus on benefits and advantages
+- Use persuasive and professional language
+- Include only true features of the property
+- Limit to 3-5 most relevant items
+
+Example output:
+<li>Spacious bedrooms with excellent natural lighting</li>
+<li>Private balcony perfect for relaxation moments</li>
+<li>Private parking for maximum convenience</li>
+{% endif %}

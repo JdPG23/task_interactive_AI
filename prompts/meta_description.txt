@@ -1,0 +1,29 @@
+{% if language == 'pt' %}
+Gere uma descrição meta SEO-optimized com no máximo 155 caracteres. Deve ser persuasiva e incluir:
+- Número de quartos (ex: T{{ features.bedrooms }})
+- Localização (Bairro, Cidade)
+- Pelo menos uma característica principal{% if features.get('balcony', False) %} (varanda){% endif %}{% if features.get('elevator', False) %} (elevador){% endif %}{% if features.get('parking', False) %} (estacionamento){% endif %}
+
+Dados da propriedade:
+- Tipo: Apartamento T{{ features.bedrooms }}
+- Área: {{ features.area }} m²
+- Preço: €{{ price }}
+- Localização: {{ location.neighborhood }}, {{ location.city }}
+- País: {{ location.country }}
+
+A descrição deve incentivar cliques dos resultados de busca e usar linguagem benefit-oriented. Gere apenas a descrição, sem citações ou explicações.
+{% else %}
+Generate an SEO-optimized meta description with maximum 155 characters. It should be compelling and include:
+- Bedroom count (e.g., {{ features.bedrooms }}-bedroom)
+- Location (Neighborhood, City)
+- At least one key feature{% if features.get('balcony', False) %} (balcony){% endif %}{% if features.get('elevator', False) %} (elevator){% endif %}{% if features.get('parking', False) %} (parking){% endif %}
+
+Property data:
+- Type: {{ features.bedrooms }}-bedroom apartment
+- Area: {{ features.area }} sqm
+- Price: €{{ price }}
+- Location: {{ location.neighborhood }}, {{ location.city }}
+- Country: {{ location.country }}
+
+The description should encourage clicks from search results and use benefit-oriented language. Generate only the description, no quotes or explanations.
+{% endif %}

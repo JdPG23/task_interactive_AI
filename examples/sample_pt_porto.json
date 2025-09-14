@@ -1,0 +1,18 @@
+{
+  "location": {
+    "neighborhood": "Ribeira",
+    "city": "Porto",
+    "country": "Portugal"
+  },
+  "features": {
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "area": 85,
+    "balcony": true,
+    "elevator": false,
+    "parking": true,
+    "garden": true
+  },
+  "price": 320000,
+  "language": "pt"
+}

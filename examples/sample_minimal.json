@@ -1,0 +1,13 @@
+{
+  "location": {
+    "neighborhood": "Alfama",
+    "city": "Lisbon",
+    "country": "Portugal"
+  },
+  "features": {
+    "bedrooms": 1,
+    "area": 65
+  },
+  "price": 250000,
+  "language": "en"
+}
