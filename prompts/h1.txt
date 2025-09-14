@@ -19,6 +19,27 @@ O headline deve:
 - Ter entre 30-80 caracteres
 
 IMPORTANTE: Gere apenas o texto do headline, SEM comillas, sem explicações adicionais.
+{% elif language == 'es' %}
+Genera un headline H1 atractivo y persuasivo para la página del anuncio inmobiliario. Debe destacar el punto de venta principal de la propiedad y ser cautivador.
+
+Datos de la propiedad:
+- Tipo: Apartamento de {{ features.bedrooms }} dormitorios
+- Área: {{ features.area }} m²
+- Precio: €{{ price }}
+- Ubicación: {{ location.neighborhood }}, {{ location.city }}
+{% if features.get('balcony', False) %}- Balcón privado{% endif %}
+{% if features.get('elevator', False) %}- Con ascensor{% endif %}
+{% if features.get('parking', False) %}- Aparcamiento incluido{% endif %}
+{% if features.get('year_built') %}- Construido en {{ features.get('year_built') }}{% endif %}
+
+El headline debe:
+- Ser único y memorable
+- Enfocarse en beneficios y estilo de vida
+- Incluir palabras clave naturales
+- Ser persuasivo y profesional
+- Tener entre 30-80 caracteres
+
+IMPORTANTE: Genera solo el texto del headline, SIN comillas, sin explicaciones adicionales.
 {% else %}
 Generate an engaging and persuasive H1 headline for the property listing page. It should highlight the main selling point and be captivating.
 

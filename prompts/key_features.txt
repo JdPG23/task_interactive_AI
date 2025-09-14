@@ -24,6 +24,32 @@ Exemplo de saída:
 <li>Quartos espaçosos com excelente iluminação natural</li>
 <li>Varanda privada perfeita para momentos de relaxamento</li>
 <li>Estacionamento privativo para máxima conveniência</li>
+{% elif language == 'es' %}
+Genera una lista HTML de 3-5 características principales de alto impacto de la propiedad. Cada elemento debe ser conciso y persuasivo.
+
+Características disponibles:
+{% if features.bedrooms > 0 %}- {{ features.bedrooms }} dormitorios espaciosos y bien iluminados{% endif %}
+{% if features.get('bathrooms', 0) > 0 %}- {{ features.get('bathrooms', 0) }} baños modernos{% endif %}
+{% if features.area > 0 %}- Área total de {{ features.area }} m²{% endif %}
+{% if features.get('balcony', False) %}- Balcón privado con vistas{% endif %}
+{% if features.get('elevator', False) %}- Ascensor para acceso conveniente{% endif %}
+{% if features.get('parking', False) %}- Aparcamiento privado incluido{% endif %}
+{% if features.get('year_built') %}- Construido en {{ features.get('year_built') }}{% endif %}
+{% if features.get('furnished', False) %}- Totalmente amueblado{% endif %}
+{% if features.get('garden', False) %}- Jardín privado{% endif %}
+
+Instrucciones:
+- Genera solo los elementos <li> de la lista (no incluir <ul>)
+- Cada elemento debe ser una oración completa empezando con mayúscula
+- Enfocarse en beneficios y ventajas
+- Usar lenguaje persuasivo y profesional
+- Incluir solo características verdaderas de la propiedad
+- Limitar a 3-5 elementos más relevantes
+
+Ejemplo de salida:
+<li>Dormitorios espaciosos con excelente iluminación natural</li>
+<li>Balcón privado perfecto para momentos de relajación</li>
+<li>Aparcamiento privado para máxima comodidad</li>
 {% else %}
 Generate an HTML list of 3-5 key high-impact features of the property. Each item should be concise and persuasive.
 

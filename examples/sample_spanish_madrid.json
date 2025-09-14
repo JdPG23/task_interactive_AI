@@ -1,0 +1,21 @@
+{
+  "location": {
+    "neighborhood": "Malasaña",
+    "city": "Madrid",
+    "region": "Madrid",
+    "country": "España"
+  },
+  "features": {
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "area": 90,
+    "balcony": true,
+    "elevator": true,
+    "parking": false,
+    "year_built": 2019,
+    "furnished": true
+  },
+  "price": 420000,
+  "language": "es",
+  "tone": "friendly"
+}

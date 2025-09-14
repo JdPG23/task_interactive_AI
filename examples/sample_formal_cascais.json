@@ -1,0 +1,20 @@
+{
+  "location": {
+    "neighborhood": "Monte Estoril",
+    "city": "Cascais",
+    "region": "Lisbon",
+    "country": "Portugal"
+  },
+  "features": {
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "area": 120,
+    "balcony": true,
+    "elevator": true,
+    "parking": false,
+    "year_built": 2010
+  },
+  "price": 520000,
+  "language": "pt",
+  "tone": "formal"
+}

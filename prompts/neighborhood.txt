@@ -20,6 +20,28 @@ A descrição deve:
 Baseie a descrição em conhecimento geral sobre o bairro, mas mantenha-a realista e não invente amenidades que não existam tipicamente. Foque nos aspectos positivos e atrativos da localização.
 
 Gere apenas a descrição do bairro, sem explicações adicionais.
+{% elif language == 'es' %}
+Genera una descripción atractiva del barrio y ubicación de la propiedad, enfocándose en el estilo de vida, encanto y amenidades para vender la ubicación tanto como la propiedad misma.
+
+Datos de la ubicación:
+- Barrio: {{ location.neighborhood }}
+- Ciudad: {{ location.city }}{% if location.region %}
+- Región: {{ location.region }}{% endif %}
+- País: {{ location.country }}
+
+La descripción debe:
+- Ser un párrafo único y fluido
+- Destacar las ventajas de vivir en este barrio
+- Mencionar amenidades cercanas (tiendas, restaurantes, transporte, etc.)
+- Crear una sensación de comunidad y calidad de vida
+- Incluir palabras clave SEO naturales (inmuebles en {{ location.neighborhood }}, apartamentos en venta en {{ location.city }})
+- Ser persuasiva y enfocarse en los beneficios del estilo de vida
+- Mantener un tono profesional y confiable
+- Tener entre 200-400 caracteres
+
+Basa la descripción en conocimiento general sobre el barrio, pero mantenla realista y no inventes amenidades que no existan típicamente. Enfócate en los aspectos positivos y atractivos de la ubicación.
+
+Genera solo la descripción del barrio, sin explicaciones adicionales.
 {% else %}
 Generate an engaging description of the property's neighborhood and location, focusing on lifestyle, charm, and amenities to sell the location as much as the property itself.
 

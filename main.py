@@ -45,6 +45,7 @@ class RealEstateContentGenerator:
         Validate that the input JSON contains all required keys.
 
         Required keys: location, features, price, language
+        Optional keys: tone
         """
         required_keys = ['location', 'features', 'price', 'language']
 
@@ -54,9 +55,19 @@ class RealEstateContentGenerator:
                 return False
 
         # Validate language field
-        if data['language'] not in ['en', 'pt']:
-            print(f"Error: Language must be 'en' or 'pt', got '{data['language']}'", file=sys.stderr)
+        if data['language'] not in ['en', 'pt', 'es']:
+            print(f"Error: Language must be 'en', 'pt', or 'es', got '{data['language']}'", file=sys.stderr)
             return False
+
+        # Validate tone field (optional)
+        valid_tones = ['formal', 'friendly', 'luxury', 'investor']
+        if 'tone' in data and data['tone'] not in valid_tones:
+            print(f"Error: Tone must be one of {valid_tones}, got '{data['tone']}'", file=sys.stderr)
+            return False
+
+        # Set default tone if not provided
+        if 'tone' not in data:
+            data['tone'] = 'friendly'
 
         return True
 
@@ -137,6 +148,26 @@ class RealEstateContentGenerator:
 
         return '\n'.join(output_parts)
 
+    def generate_complete_html(self, data: Dict[str, Any]) -> str:
+        """
+        Generate a complete HTML document with proper UTF-8 encoding.
+        This ensures Portuguese characters display correctly in browsers.
+        """
+        content = self.generate_full_content(data)
+        
+        html_template = f"""<!DOCTYPE html>
+<html lang="{data.get('language', 'en')}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {content}
+</head>
+<body>
+    <!-- Content is in the head for SEO optimization -->
+</body>
+</html>"""
+        return html_template
+
 
 def main():
     """Main CLI entry point."""
@@ -157,6 +188,12 @@ Language must be 'en' for English or 'pt' for Portuguese.
         'input_json_path',
         type=str,
         help='Path to the input JSON file containing property data'
+    )
+    
+    parser.add_argument(
+        '--html',
+        action='store_true',
+        help='Generate complete HTML document with UTF-8 encoding (fixes Portuguese characters in browsers)'
     )
 
     args = parser.parse_args()
@@ -182,10 +219,23 @@ Language must be 'en' for English or 'pt' for Portuguese.
             sys.exit(1)
 
         # Generate content
-        output = generator.generate_full_content(data)
+        if args.html:
+            output = generator.generate_complete_html(data)
+        else:
+            output = generator.generate_full_content(data)
 
-        # Print to stdout
-        print(output)
+        # Always print with explicit UTF-8 encoding, with a comprehensive fallback
+        try:
+            print(output.encode('utf-8', errors='replace').decode('utf-8'))
+        except Exception as e:
+            try:
+                # Try printing as-is (may work in some environments)
+                print(output)
+            except Exception as e2:
+                # As a last resort, print a safe error message
+                print("[Error] Unable to print output due to encoding issues.", file=sys.stderr)
+                print(f"[Debug] First error: {e}", file=sys.stderr)
+                print(f"[Debug] Second error: {e2}", file=sys.stderr)
 
     except json.JSONDecodeError as e:
         print(f"Error: Invalid JSON format in '{input_path}': {e}", file=sys.stderr)

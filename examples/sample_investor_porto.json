@@ -1,0 +1,19 @@
+{
+  "location": {
+    "neighborhood": "Cedofeita",
+    "city": "Porto",
+    "country": "Portugal"
+  },
+  "features": {
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "area": 95,
+    "balcony": false,
+    "elevator": true,
+    "parking": true,
+    "year_built": 2018
+  },
+  "price": 280000,
+  "language": "en",
+  "tone": "investor"
+}

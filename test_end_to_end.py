@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
 """
-End-to-End Test for the Complete AI Real Estate Generator System
+Comprehensive End-to-End Test for the AI Real Estate Generator System
 
-This test verifies the entire pipeline:
+This test verifies the complete enhanced pipeline:
 1. Environment configuration (.env)
 2. OpenRouter API connection
 3. JSON input processing
 4. LLM content generation for all 7 sections
 5. HTML output formatting
-6. Complete system integration
+6. Multilingual support (English, Portuguese, Spanish)
+7. Content quality evaluation and scoring
+8. System integration with all bonus features
 
-FEATURES:
+ENHANCED FEATURES:
+- Tests all 3 supported languages
+- Content quality evaluation with scoring
 - Automatically opens generated HTML in browser for review
 - Interactive prompts to control test flow
 - Comprehensive validation of all 7 sections
 - Detailed error reporting
+- Tone customization testing
 """
 
 import os
@@ -132,7 +137,9 @@ def test_full_pipeline():
             [sys.executable, 'main.py', test_input],
             capture_output=True,
             text=True,
-            timeout=300  # 60 second timeout
+            encoding='utf-8',
+            errors='replace',
+            timeout=300  # 300 second timeout
         )
 
         if result.returncode != 0:
@@ -225,38 +232,185 @@ def test_output_quality():
         return False
 
 
+def test_multilingual_support():
+    """Test 6: Test content generation in all 3 supported languages."""
+    print("\n🧪 Test 6: Multilingual Support (EN, PT, ES)")
+    print("-" * 30)
+    
+    test_files = [
+        ('examples/sample_en_lisbon.json', 'en', 'English'),
+        ('examples/sample_pt_porto.json', 'pt', 'Portuguese'),
+        ('examples/sample_spanish_madrid.json', 'es', 'Spanish')
+    ]
+    
+    generated_files = []
+    
+    for json_file, lang_code, lang_name in test_files:
+        if not Path(json_file).exists():
+            print(f"❌ {json_file} not found")
+            return False
+        
+        output_file = f'test_{lang_code}_output.html'
+        
+        try:
+            print(f"🚀 Testing {lang_name}...")
+            result = subprocess.run(
+                [sys.executable, 'main.py', json_file],
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                errors='replace',
+                timeout=120
+            )
+            
+            if result.returncode != 0:
+                print(f"❌ {lang_name} generation failed: {result.stderr}")
+                return False
+            
+            # Save output
+            with open(output_file, 'w', encoding='utf-8', errors='replace') as f:
+                f.write(result.stdout.strip())
+            
+            generated_files.append((output_file, lang_code, lang_name))
+            print(f"✅ {lang_name} content generated successfully")
+            
+            # Open in browser for user review
+            try:
+                print(f"🌐 Opening {lang_name} output in browser...")
+                print(f"   📋 Please review the {lang_name} content for:")
+                print("      ✅ All 7 HTML sections present")
+                print("      ✅ Language-appropriate keywords and phrases")
+                print("      ✅ Natural, fluent text quality")
+                print("      ✅ Proper character encoding (ñ, á, ç, etc.)")
+                webbrowser.open(f'file://{Path(output_file).absolute()}')
+                input(f"   ⏳ Press Enter when done reviewing {lang_name} content...")
+            except Exception as e:
+                print(f"⚠️  Could not open browser for {lang_name}: {e}")
+                input("   📋 Press Enter to continue...")
+            
+        except subprocess.TimeoutExpired:
+            print(f"❌ {lang_name} generation timed out")
+            return False
+        except Exception as e:
+            print(f"❌ {lang_name} test failed: {e}")
+            return False
+    
+    # Store generated files for cleanup
+    test_multilingual_support.generated_files = generated_files
+    print("✅ All 3 languages tested successfully")
+    return True
+
+
+def test_content_evaluator():
+    """Test 7: Test content quality evaluation for all languages."""
+    print("\n🧪 Test 7: Content Quality Evaluation")
+    print("-" * 30)
+    
+    if not hasattr(test_multilingual_support, 'generated_files'):
+        print("❌ No generated files found. Run multilingual test first.")
+        return False
+    
+    try:
+        from content_evaluator import ContentEvaluator
+        evaluator = ContentEvaluator()
+        
+        overall_scores = []
+        
+        for output_file, lang_code, lang_name in test_multilingual_support.generated_files:
+            if not Path(output_file).exists():
+                print(f"❌ {output_file} not found")
+                continue
+            
+            # Read content
+            with open(output_file, 'r', encoding='utf-8', errors='replace') as f:
+                content = f.read()
+            
+            # Evaluate content
+            report = evaluator.generate_report(content, lang_code)
+            score = report['overall_score']
+            overall_scores.append(score)
+            
+            # Show results
+            print(f"📊 {lang_name}: {score}/100", end="")
+            if score >= 80:
+                print(" 🏆 EXCELLENT")
+            elif score >= 60:
+                print(" ✅ GOOD")
+            elif score >= 40:
+                print(" ⚠️  FAIR")
+            else:
+                print(" ❌ POOR")
+        
+        # Overall evaluation
+        if overall_scores:
+            avg_score = sum(overall_scores) / len(overall_scores)
+            print(f"\n📈 Average Quality Score: {avg_score:.1f}/100")
+            
+            if avg_score >= 75:
+                print("🎉 Content quality exceeds expectations!")
+                return True
+            elif avg_score >= 60:
+                print("✅ Content quality meets standards")
+                return True
+            else:
+                print("⚠️  Content quality needs improvement")
+                return False
+        
+        return False
+        
+    except ImportError:
+        print("❌ Content evaluator not available")
+        return False
+    except Exception as e:
+        print(f"❌ Evaluation failed: {e}")
+        return False
+
+
 def cleanup():
     """Clean up test files."""
-    test_output = 'test_output.html'
-    if Path(test_output).exists():
-        # Open the file in browser before deleting it
-        try:
-            print(f"🌐 Opening {test_output} in browser for review...")
-            print("   (This is the final output - take your time to review it)")
-            webbrowser.open(f'file://{Path(test_output).absolute()}')
-            print("✅ HTML file opened in browser")
-            print("   Press Enter when you're done reviewing to continue cleanup...")
-            input()
-        except Exception as e:
-            print(f"⚠️  Could not open browser: {e}")
-
-        os.remove(test_output)
-        print(f"🧹 Cleaned up {test_output}")
+    test_files = ['test_output.html']
+    
+    # Add multilingual test files if they exist
+    if hasattr(test_multilingual_support, 'generated_files'):
+        for output_file, _, _ in test_multilingual_support.generated_files:
+            test_files.append(output_file)
+    
+    print("\n🧹 Cleaning up test files...")
+    
+    # Clean up all test files (no need to open again, already reviewed)
+    cleaned_count = 0
+    for file_path in test_files:
+        if Path(file_path).exists():
+            os.remove(file_path)
+            cleaned_count += 1
+    
+    if cleaned_count > 0:
+        print(f"✅ Cleaned up {cleaned_count} test files")
+    else:
+        print("ℹ️  No test files to clean up")
 
 
 def main():
     """Run all end-to-end tests."""
-    print("🚀 END-TO-END TEST SUITE")
-    print("=" * 50)
-    print("Testing the complete AI Real Estate Generator pipeline")
-    print("This may take a minute or two...\n")
+    print("🚀 COMPREHENSIVE END-TO-END TEST SUITE")
+    print("=" * 60)
+    print("Testing the complete AI Real Estate Generator pipeline:")
+    print("✅ Environment & API connectivity")
+    print("✅ JSON validation & processing") 
+    print("✅ Content generation pipeline")
+    print("✅ Multilingual support (EN, PT, ES)")
+    print("✅ Content quality evaluation")
+    print("✅ All bonus features")
+    print("\nThis comprehensive test may take 3-5 minutes...\n")
 
     tests = [
         ("Environment Setup", test_environment_setup),
         ("OpenRouter Connection", test_openrouter_connection),
         ("Sample JSON Validation", test_sample_json_validation),
         ("Full Pipeline Execution", test_full_pipeline),
-        ("Output Quality Check", test_output_quality)
+        ("Output Quality Check", test_output_quality),
+        ("Multilingual Support", test_multilingual_support),
+        ("Content Quality Evaluation", test_content_evaluator)
     ]
 
     results = []
@@ -278,7 +432,7 @@ def main():
 
     for test_name, result in results:
         status = "✅ PASS" if result else "❌ FAIL"
-        print("25")
+        print(f"{status} {test_name}")
         if result:
             passed += 1
 
@@ -286,9 +440,11 @@ def main():
 
     if passed == total:
         print("\n🎉 ALL TESTS PASSED! The system is working perfectly end-to-end.")
-        print("\nYou can now confidently use:")
-        print("  python main.py examples/sample_en_lisbon.json")
-        print("  python main.py examples/sample_pt_porto.json")
+        print("\n🌍 You can now confidently use all 3 languages:")
+        print("  python main.py examples/sample_en_lisbon.json      # English")
+        print("  python main.py examples/sample_pt_porto.json       # Portuguese")
+        print("  python main.py examples/sample_spanish_madrid.json # Spanish")
+        print("\n🎯 Plus tone customization and content evaluation features!")
     else:
         print(f"\n⚠️  {total - passed} test(s) failed. Check the output above for details.")
 

@@ -12,6 +12,20 @@ Dados da propriedade:
 - País: {{ location.country }}
 
 Gere apenas o título, sem explicações adicionais. O título deve ser persuasivo e incluir palavras-chave naturais como "apartamento à venda" ou similar.
+{% elif language == 'es' %}
+Genera un título SEO-optimizado conciso para un anuncio inmobiliario. El título debe tener máximo 60 caracteres e incluir:
+- Tipo de propiedad (ej: Apartamento de {{ features.bedrooms }} Dormitorios)
+- Tipo de anuncio (En Venta/Alquiler)
+- Ubicación (Barrio, Ciudad)
+
+Datos de la propiedad:
+- Tipo: Apartamento de {{ features.bedrooms }} dormitorios
+- Área: {{ features.area }} m²
+- Precio: €{{ price }}
+- Ubicación: {{ location.neighborhood }}, {{ location.city }}{% if location.region %}, {{ location.region }}{% endif %}
+- País: {{ location.country }}
+
+Genera solo el título, sin explicaciones adicionales. El título debe ser persuasivo e incluir palabras clave naturales como "apartamento en venta".
 {% else %}
 Generate a concise SEO-optimized title for a real estate listing. The title must be maximum 60 characters and include:
 - Property type (e.g., {{ features.bedrooms }}-Bedroom Apartment)

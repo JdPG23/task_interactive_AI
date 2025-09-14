@@ -1,6 +1,13 @@
 {% if language == 'pt' %}
 Gere uma descrição rica e detalhada da propriedade (500-700 caracteres) que teça todas as características principais em uma narrativa envolvente sobre o imóvel.
 
+TOM DE COMUNICAÇÃO ({{ tone }}):
+{% if tone == 'formal' %}- Linguagem profissional, factual e séria. Use vocabulário técnico quando apropriado.
+{% elif tone == 'friendly' %}- Linguagem calorosa, acessível e pessoal. Fale diretamente ao leitor como um amigo.
+{% elif tone == 'luxury' %}- Linguagem sofisticada, premium e exclusiva. Enfatize qualidade superior e status.
+{% elif tone == 'investor' %}- Linguagem orientada a ROI, empresarial e analítica. Foque em potencial de investimento e rentabilidade.
+{% endif %}
+
 Dados da propriedade:
 - Tipo: Apartamento T{{ features.bedrooms }}
 - Área: {{ features.area }} m²
@@ -28,8 +35,52 @@ A descrição deve:
 - Ter entre 500-700 caracteres
 
 Gere apenas a descrição, sem explicações adicionais.
+{% elif language == 'es' %}
+Genera una descripción rica y detallada de la propiedad (500-700 caracteres) que entrelace todas las características principales en una narrativa atractiva sobre el inmueble.
+
+TONO DE COMUNICACIÓN ({{ tone }}):
+{% if tone == 'formal' %}- Lenguaje profesional, factual y serio. Usa vocabulario técnico cuando sea apropiado.
+{% elif tone == 'friendly' %}- Lenguaje cálido, accesible y personal. Habla directamente al lector como un amigo.
+{% elif tone == 'luxury' %}- Lenguaje sofisticado, premium y exclusivo. Enfatiza la calidad superior y el estatus.
+{% elif tone == 'investor' %}- Lenguaje orientado al ROI, empresarial y analítico. Enfócate en el potencial de inversión y rentabilidad.
+{% endif %}
+
+Datos de la propiedad:
+- Tipo: Apartamento de {{ features.bedrooms }} dormitorios
+- Área: {{ features.area }} m²
+- Precio: €{{ price }}
+- Ubicación: {{ location.neighborhood }}, {{ location.city }}{% if location.region %}, {{ location.region }}{% endif %}
+- País: {{ location.country }}
+
+Características disponibles:
+{% if features.bedrooms > 0 %}- {{ features.bedrooms }} dormitorios espaciosos{% endif %}
+{% if features.get('bathrooms', 0) > 0 %}- {{ features.get('bathrooms', 0) }} baños{% endif %}
+{% if features.area > 0 %}- Área total de {{ features.area }} m²{% endif %}
+{% if features.get('balcony', False) %}- Balcón privado perfecto para disfrutar de días soleados{% endif %}
+{% if features.get('elevator', False) %}- Acceso por ascensor para comodidad diaria{% endif %}
+{% if features.get('parking', False) %}- Aparcamiento privado incluido{% endif %}
+{% if features.get('year_built') %}- Construido en {{ features.get('year_built') }}{% endif %}
+{% if features.get('furnished', False) %}- Amueblado y listo para mudarse{% endif %}
+{% if features.get('garden', False) %}- Jardín privado para momentos de ocio{% endif %}
+
+La descripción debe:
+- Ser una narrativa fluida y atractiva
+- Enfocarse en beneficios y estilo de vida, no solo características
+- Incluir palabras clave SEO naturales (apartamento en venta en {{ location.neighborhood }}, propiedad en {{ location.city }})
+- Mantener un tono profesional pero accesible
+- Ser precisa y basada solo en los datos proporcionados
+- Tener entre 500-700 caracteres
+
+Genera solo la descripción, sin explicaciones adicionales.
 {% else %}
 Generate a rich, detailed property description (500-700 characters) that weaves all key features into a compelling narrative about the property.
+
+COMMUNICATION TONE ({{ tone }}):
+{% if tone == 'formal' %}- Professional, factual, and serious language. Use technical vocabulary when appropriate.
+{% elif tone == 'friendly' %}- Warm, approachable, and personal language. Speak directly to the reader as a friend.
+{% elif tone == 'luxury' %}- Sophisticated, premium, and exclusive language. Emphasize superior quality and status.
+{% elif tone == 'investor' %}- ROI-focused, business-oriented, and analytical language. Focus on investment potential and profitability.
+{% endif %}
 
 Property data:
 - Type: {{ features.bedrooms }}-Bedroom Apartment

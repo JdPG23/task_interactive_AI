@@ -1,0 +1,21 @@
+{
+  "location": {
+    "neighborhood": "Príncipe Real",
+    "city": "Lisbon",
+    "region": "Lisbon",
+    "country": "Portugal"
+  },
+  "features": {
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "area": 180,
+    "balcony": true,
+    "elevator": true,
+    "parking": true,
+    "year_built": 2020,
+    "furnished": true
+  },
+  "price": 850000,
+  "language": "en",
+  "tone": "luxury"
+}
