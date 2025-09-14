@@ -20,6 +20,8 @@ A descrição deve:
 Baseie a descrição em conhecimento geral sobre o bairro, mas mantenha-a realista e não invente amenidades que não existam tipicamente. Foque nos aspectos positivos e atrativos da localização.
 
 Gere apenas a descrição do bairro, sem explicações adicionais.
+
+IMPORTANTE: NÃO use aspas, asteriscos ou qualquer formatação especial na sua resposta. Apenas texto simples.
 {% elif language == 'es' %}
 Genera una descripción atractiva del barrio y ubicación de la propiedad, enfocándose en el estilo de vida, encanto y amenidades para vender la ubicación tanto como la propiedad misma.
 
@@ -42,6 +44,8 @@ La descripción debe:
 Basa la descripción en conocimiento general sobre el barrio, pero mantenla realista y no inventes amenidades que no existan típicamente. Enfócate en los aspectos positivos y atractivos de la ubicación.
 
 Genera solo la descripción del barrio, sin explicaciones adicionales.
+
+IMPORTANTE: NO uses comillas, asteriscos o cualquier formato especial en tu respuesta. Solo texto simple.
 {% else %}
 Generate an engaging description of the property's neighborhood and location, focusing on lifestyle, charm, and amenities to sell the location as much as the property itself.
 
@@ -64,4 +68,6 @@ The description should:
 Base the description on general knowledge about the neighborhood, but keep it realistic and don't invent amenities that don't typically exist. Focus on the positive and attractive aspects of the location.
 
 Generate only the neighborhood description, no additional explanations.
+
+IMPORTANT: Do NOT use quotes, asterisks, or any special formatting in your response. Output plain text only.
 {% endif %}

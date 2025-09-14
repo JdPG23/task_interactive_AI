@@ -46,5 +46,13 @@ echo 2. Test OpenRouter: python test_openrouter.py
 echo 3. Test environment: python test_env.py
 echo 4. FULL end-to-end test: python test_end_to_end.py
 echo 5. Generate content: python main.py examples\sample_en_lisbon.json
+echo 6. Save to file: python main.py examples\sample_spanish_madrid.json -o output.html
+echo 7. WITH QUALITY EVALUATION: python main.py examples\sample_pt_porto.json -o output.html --evaluate
+echo.
+echo [*] Starting interactive session with venv activated...
+echo [*] You are now inside the virtual environment (venv)
+echo [*] Type 'exit' to close this session
+echo.
 
-pause
+REM Start a new command prompt with venv activated
+cmd /k

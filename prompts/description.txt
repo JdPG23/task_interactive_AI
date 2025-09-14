@@ -35,6 +35,8 @@ A descrição deve:
 - Ter entre 500-700 caracteres
 
 Gere apenas a descrição, sem explicações adicionais.
+
+IMPORTANTE: NÃO use aspas, asteriscos ou qualquer formatação especial na sua resposta. Apenas texto simples.
 {% elif language == 'es' %}
 Genera una descripción rica y detallada de la propiedad (500-700 caracteres) que entrelace todas las características principales en una narrativa atractiva sobre el inmueble.
 
@@ -72,6 +74,8 @@ La descripción debe:
 - Tener entre 500-700 caracteres
 
 Genera solo la descripción, sin explicaciones adicionales.
+
+IMPORTANTE: NO uses comillas, asteriscos o cualquier formato especial en tu respuesta. Solo texto simple.
 {% else %}
 Generate a rich, detailed property description (500-700 characters) that weaves all key features into a compelling narrative about the property.
 
@@ -109,4 +113,6 @@ The description should:
 - Be 500-700 characters long
 
 Generate only the description, no additional explanations.
+
+IMPORTANT: Do NOT use quotes, asterisks, or any special formatting in your response. Output plain text only.
 {% endif %}

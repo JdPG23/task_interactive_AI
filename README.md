@@ -5,7 +5,7 @@ A sophisticated CLI tool that generates SEO-optimized, multilingual property lis
 ## 🚀 Features
 
 - **SEO-First Content Generation**: Every piece of content is optimized for search engines
-- **Multilingual Support**: Generates content in English (`en`) and Portuguese (`pt`)
+- **Multilingual Support**: Generates content in English (`en`), Portuguese (`pt`), and Spanish (`es`)
 - **Benefit-Oriented Language**: Focuses on lifestyle benefits rather than just features
 - **Robust Data Handling**: Gracefully handles missing optional data points
 - **Structured Output**: Produces 7-part HTML content structure
@@ -50,15 +50,37 @@ A sophisticated CLI tool that generates SEO-optimized, multilingual property lis
 
 **Generate content to console:**
 ```bash
-python main.py examples\sample_en_lisbon.json
+python main.py examples/sample_en_lisbon.json
 ```
 
-**Save output to HTML file:**
+**Save output to HTML file (recommended):**
 ```bash
-python main.py examples\sample_en_lisbon.json > output.html
+python main.py examples/sample_en_lisbon.json -o output.html
+```
+
+**Alternative save method:**
+```bash
+python main.py examples/sample_en_lisbon.json > output.html
+```
+
+**Generate complete HTML document:**
+```bash
+python main.py examples/sample_en_lisbon.json --html -o complete_page.html
+```
+
+**Generate with quality evaluation (recommended for important content):**
+```bash
+python main.py examples/sample_en_lisbon.json -o output.html --evaluate
 ```
 
 The tool generates HTML-tagged content that you can save directly to an HTML file for immediate use in web pages or content management systems.
+
+### Command Line Options
+
+- `-o, --output FILE` - Save output directly to file with UTF-8 encoding (recommended for special characters)
+- `--html` - Generate complete HTML document with proper structure
+- `--safe-output` - Use ASCII-safe output mode for terminals with encoding issues
+- `--evaluate` - **⚠️ RECOMMENDED**: Evaluate content quality after generation (shows quality score and detailed analysis)
 
 ### Testing the System
 
@@ -108,7 +130,10 @@ python test_end_to_end.py
 
 ```bash
 # Example: Save generated content to HTML file
-python main.py examples\sample_en_lisbon.json > property_listing.html
+python main.py examples/sample_en_lisbon.json -o property_listing.html
+
+# Example: Generate with quality evaluation  
+python main.py examples/sample_pt_porto.json -o output_pt.html --evaluate
 ```
 
 ### Input JSON Format
@@ -157,7 +182,7 @@ The input JSON file must contain the following required fields:
 
 - **`price`** (integer): Property price in euros
 
-- **`language`** (string): Output language - must be `"en"` or `"pt"`
+- **`language`** (string): Output language - must be `"en"`, `"pt"`, or `"es"`
 
 ## 📄 Output Structure
 
@@ -182,6 +207,13 @@ The tool generates 7 HTML sections in the following order:
 - Uses Portuguese conventions (Portugal variant)
 - Implements "T3" notation for bedroom count
 - Includes localized SEO keywords like "apartamento à venda em [localização]"
+- Proper handling of Portuguese characters (ã, ç, ê, ô, etc.)
+
+### Spanish (`"es"`)
+- Uses Spanish terminology and grammar
+- Follows Spanish real estate conventions
+- Includes localized SEO keywords like "apartamento en venta en [ubicación]"
+- Proper handling of Spanish characters (ñ, á, é, í, ó, ú, etc.)
 
 ## 📝 Examples
 
@@ -229,6 +261,30 @@ The tool generates 7 HTML sections in the following order:
 }
 ```
 
+### Example Input (Spanish)
+
+```json
+{
+  "location": {
+    "neighborhood": "Malasaña",
+    "city": "Madrid",
+    "country": "España"
+  },
+  "features": {
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "area": 90,
+    "balcony": true,
+    "elevator": true,
+    "parking": false,
+    "year_built": 2019,
+    "furnished": true
+  },
+  "price": 420000,
+  "language": "es"
+}
+```
+
 ## 🔧 Technical Details
 
 ### Architecture
@@ -245,8 +301,11 @@ The tool follows strict content generation principles:
 - **Accuracy**: Content reflects only the data provided in input JSON
 - **SEO Optimization**: Natural integration of relevant keywords
 - **Benefit-Focused**: Emphasizes lifestyle benefits over mere features
-- **Multilingual**: Proper localization for Portuguese content
+- **Multilingual**: Proper localization for Portuguese and Spanish content
 - **Character Limits**: Strict adherence to HTML tag character limits
+- **Quality Assurance**: Use `--evaluate` flag for quality scoring and improvement suggestions
+
+> **💡 Production Tip**: Always use `--evaluate` for important content to ensure quality standards are met before publishing.
 
 ### Dependencies
 
@@ -275,19 +334,28 @@ The tool follows strict content generation principles:
 
 3. **Invalid Language Code**
    ```
-   Error: Language must be 'en' or 'pt', got 'es'
+   Error: Language must be 'en', 'pt', or 'es', got 'fr'
    ```
-   Solution: Use only `"en"` or `"pt"` for the language field
+   Solution: Use only `"en"`, `"pt"`, or `"es"` for the language field
 
 4. **Import Error**
    ```
-   Error: google-generativeai package not installed
+   Error: openai package not installed
    ```
    Solution: Run `pip install -r requirements.txt`
 
+5. **Character Encoding Issues (Windows)**
+   ```
+   Garbled characters: apartamento en Malaša±a
+   ```
+   Solution: Use the `-o` option to save directly to file:
+   ```bash
+   python main.py examples/sample_spanish_madrid.json -o output.html
+   ```
+
 ### API Rate Limits
 
-The tool uses Google's Gemini API which has rate limits. If you encounter rate limit errors, wait a few minutes before retrying.
+The tool uses DeepSeek Chat via OpenRouter API which has rate limits. If you encounter rate limit errors, wait a few minutes before retrying.
 
 ## 🤝 Contributing
 
@@ -304,6 +372,6 @@ This project is provided as-is for educational and commercial use in real estate
 
 ## 🔗 Links
 
-- [Google AI Studio](https://aistudio.google.com/) - For API key setup
-- [Gemini API Documentation](https://ai.google.dev/docs) - API reference
+- [OpenRouter API](https://openrouter.ai/) - For API key setup
+- [DeepSeek Chat Documentation](https://api-docs.deepseek.com/) - Model reference
 - [Real Estate SEO Best Practices](https://developers.google.com/search/docs/appearance/structured-data/real-estate-listing) - Google guidelines

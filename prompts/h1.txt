@@ -18,7 +18,7 @@ O headline deve:
 - Ser persuasivo e profissional
 - Ter entre 30-80 caracteres
 
-IMPORTANTE: Gere apenas o texto do headline, SEM comillas, sem explicações adicionais.
+IMPORTANTE: Gere apenas o texto do headline, SEM aspas, asteriscos ou qualquer formatação especial. Apenas texto simples.
 {% elif language == 'es' %}
 Genera un headline H1 atractivo y persuasivo para la página del anuncio inmobiliario. Debe destacar el punto de venta principal de la propiedad y ser cautivador.
 
@@ -39,7 +39,7 @@ El headline debe:
 - Ser persuasivo y profesional
 - Tener entre 30-80 caracteres
 
-IMPORTANTE: Genera solo el texto del headline, SIN comillas, sin explicaciones adicionales.
+IMPORTANTE: Genera solo el texto del headline, SIN comillas, asteriscos o cualquier formato especial. Solo texto simple.
 {% else %}
 Generate an engaging and persuasive H1 headline for the property listing page. It should highlight the main selling point and be captivating.
 
@@ -60,5 +60,5 @@ The headline should:
 - Be persuasive and professional
 - Be 30-80 characters long
 
-IMPORTANT: Generate only the headline text, WITHOUT quotes, no additional explanations.
+IMPORTANT: Generate only the headline text, WITHOUT quotes, asterisks, or any special formatting. Output plain text only.
 {% endif %}

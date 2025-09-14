@@ -11,7 +11,9 @@ Dados da propriedade:
 - Localização: {{ location.neighborhood }}, {{ location.city }}{% if location.region %}, {{ location.region }}{% endif %}
 - País: {{ location.country }}
 
-Gere apenas o título, sem explicações adicionais. O título deve ser persuasivo e incluir palavras-chave naturais como "apartamento à venda" ou similar.
+Gere apenas o título, sem explicações adicionais. O título deve ser persuasivo e incluir palavras-chave naturais.
+
+IMPORTANTE: NÃO use aspas, asteriscos ou qualquer formatação especial na sua resposta. Apenas texto simples.
 {% elif language == 'es' %}
 Genera un título SEO-optimizado conciso para un anuncio inmobiliario. El título debe tener máximo 60 caracteres e incluir:
 - Tipo de propiedad (ej: Apartamento de {{ features.bedrooms }} Dormitorios)
@@ -25,7 +27,9 @@ Datos de la propiedad:
 - Ubicación: {{ location.neighborhood }}, {{ location.city }}{% if location.region %}, {{ location.region }}{% endif %}
 - País: {{ location.country }}
 
-Genera solo el título, sin explicaciones adicionales. El título debe ser persuasivo e incluir palabras clave naturales como "apartamento en venta".
+Genera solo el título, sin explicaciones adicionales. El título debe ser persuasivo e incluir palabras clave naturales.
+
+IMPORTANTE: NO uses comillas, asteriscos o cualquier formato especial en tu respuesta. Solo texto simple.
 {% else %}
 Generate a concise SEO-optimized title for a real estate listing. The title must be maximum 60 characters and include:
 - Property type (e.g., {{ features.bedrooms }}-Bedroom Apartment)
@@ -39,5 +43,7 @@ Property data:
 - Location: {{ location.neighborhood }}, {{ location.city }}{% if location.region %}, {{ location.region }}{% endif %}
 - Country: {{ location.country }}
 
-Generate only the title, no additional explanations. The title should be persuasive and include natural keywords like "apartment for sale".
+Generate only the title, no additional explanations. The title should be persuasive and include natural keywords. 
+
+IMPORTANT: Do NOT use quotes, asterisks, or any special formatting in your response. Output plain text only.
 {% endif %}

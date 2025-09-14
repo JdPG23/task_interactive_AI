@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
-import locale
-import codecs
 
-# Force UTF-8 output for Windows
+# Basic UTF-8 configuration for console output
 if hasattr(sys.stdout, 'reconfigure'):
     try:
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
     except Exception:
         pass
 """
@@ -28,6 +27,25 @@ from typing import Dict, Any
 
 from jinja2 import Environment, FileSystemLoader
 from llm_service import LLMService
+
+
+def make_ascii_safe(text: str) -> str:
+    """Convert accented characters to ASCII-safe alternatives for terminals with encoding issues."""
+    replacements = {
+        # Portuguese & Spanish characters
+        'ã': 'a~', 'á': 'a', 'ç': 'c', 'é': 'e', 'ê': 'e', 'í': 'i', 
+        'ó': 'o', 'ô': 'o', 'õ': 'o~', 'ú': 'u', 'ñ': 'n~',
+        # Uppercase
+        'Ã': 'A~', 'Á': 'A', 'Ç': 'C', 'É': 'E', 'Ê': 'E', 'Í': 'I',
+        'Ó': 'O', 'Ô': 'O', 'Õ': 'O~', 'Ú': 'U', 'Ñ': 'N~',
+        # Symbols
+        '²': '2', '³': '3', '€': 'EUR',
+    }
+    
+    result = text
+    for accented, ascii_alt in replacements.items():
+        result = result.replace(accented, ascii_alt)
+    return result
 
 
 class RealEstateContentGenerator:
@@ -195,6 +213,24 @@ Language must be 'en' for English or 'pt' for Portuguese.
         action='store_true',
         help='Generate complete HTML document with UTF-8 encoding (fixes Portuguese characters in browsers)'
     )
+    
+    parser.add_argument(
+        '--safe-output',
+        action='store_true',
+        help='Use ASCII-safe output mode for terminals with encoding issues (converts accented characters to alternatives)'
+    )
+    
+    parser.add_argument(
+        '--output', '-o',
+        type=str,
+        help='Save output directly to file with UTF-8 encoding (avoids PowerShell redirection encoding issues)'
+    )
+    
+    parser.add_argument(
+        '--evaluate',
+        action='store_true',
+        help='Evaluate content quality after generation (shows quality score and detailed analysis)'
+    )
 
     args = parser.parse_args()
 
@@ -223,19 +259,115 @@ Language must be 'en' for English or 'pt' for Portuguese.
             output = generator.generate_complete_html(data)
         else:
             output = generator.generate_full_content(data)
-
-        # Always print with explicit UTF-8 encoding, with a comprehensive fallback
-        try:
-            print(output.encode('utf-8', errors='replace').decode('utf-8'))
-        except Exception as e:
+        
+        # Evaluate content quality if requested
+        if args.evaluate:
             try:
-                # Try printing as-is (may work in some environments)
-                print(output)
-            except Exception as e2:
-                # As a last resort, print a safe error message
-                print("[Error] Unable to print output due to encoding issues.", file=sys.stderr)
-                print(f"[Debug] First error: {e}", file=sys.stderr)
-                print(f"[Debug] Second error: {e2}", file=sys.stderr)
+                from content_evaluator import ContentEvaluator
+                evaluator = ContentEvaluator()
+                
+                print("\n" + "="*50, file=sys.stderr)
+                print("📊 CONTENT QUALITY EVALUATION", file=sys.stderr)
+                print("="*50, file=sys.stderr)
+                
+                # Generate evaluation report
+                report = evaluator.generate_report(output, data['language'])
+                score = report['overall_score']
+                
+                # Display results
+                print(f"📈 Overall Quality Score: {score}/100", file=sys.stderr)
+                
+                if score >= 80:
+                    print("🏆 EXCELLENT - Content exceeds expectations!", file=sys.stderr)
+                elif score >= 60:
+                    print("✅ GOOD - Content meets quality standards", file=sys.stderr)
+                elif score >= 40:
+                    print("⚠️  FAIR - Content needs some improvement", file=sys.stderr)
+                else:
+                    print("❌ POOR - Content requires significant improvement", file=sys.stderr)
+                
+                # Show detailed breakdown
+                print("\n📋 Detailed Analysis:", file=sys.stderr)
+                
+                # Readability metrics
+                if 'readability' in report:
+                    readability = report['readability']
+                    print(f"  📖 Readability:", file=sys.stderr)
+                    print(f"    • Flesch Score: {readability.get('flesch_score', 0):.1f}/100", file=sys.stderr)
+                    print(f"    • Avg Words/Sentence: {readability.get('avg_words_per_sentence', 0):.1f}", file=sys.stderr)
+                    print(f"    • Total Words: {readability.get('total_words', 0)}", file=sys.stderr)
+                
+                # SEO evaluation
+                if 'seo' in report:
+                    seo = report['seo']
+                    seo_score = seo.get('seo_score', 0)
+                    print(f"  🎯 SEO Score: {seo_score}/100", file=sys.stderr)
+                    keyword_count = seo.get('keyword_count', 0)
+                    if keyword_count > 0:
+                        print(f"    • Keywords found: {keyword_count} keywords", file=sys.stderr)
+                        print(f"    • Keyword density: {seo.get('keyword_density', 0)}%", file=sys.stderr)
+                
+                # Character limits
+                if 'character_limits' in report:
+                    limits = report['character_limits']
+                    compliant_count = sum(1 for section in limits.values() if section.get('compliant', False))
+                    total_count = len(limits)
+                    print(f"  📏 Character Limits: {compliant_count}/{total_count} sections compliant", file=sys.stderr)
+                    
+                    # Show non-compliant sections
+                    for section, data in limits.items():
+                        if not data.get('compliant', True):
+                            print(f"    ❌ {section}: {data.get('status', 'Check failed')}", file=sys.stderr)
+                
+                # Structure compliance
+                if 'structure_compliance' in report:
+                    structure = report['structure_compliance']
+                    sections_found = sum(1 for found in structure.values() if found)
+                    print(f"  🏗️  Structure: {sections_found}/7 sections found", file=sys.stderr)
+                    
+                    # Show which sections are missing
+                    missing_sections = [section for section, found in structure.items() if not found]
+                    if missing_sections:
+                        print(f"    ❌ Missing: {', '.join(missing_sections)}", file=sys.stderr)
+                
+                print("\n💡 Tips for improvement:", file=sys.stderr)
+                print("  • Use --html option for complete document structure", file=sys.stderr)
+                print("  • Ensure all 7 required sections are present", file=sys.stderr)
+                print("  • Check character limits for title (<60) and meta description (<155)", file=sys.stderr)
+                
+                print("="*50, file=sys.stderr)
+                
+            except ImportError:
+                print("⚠️  Content evaluator not available. Install required dependencies.", file=sys.stderr)
+            except Exception as e:
+                print(f"⚠️  Evaluation failed: {e}", file=sys.stderr)
+
+        # Handle output destination
+        if args.output:
+            # Save directly to file with UTF-8 encoding (recommended method)
+            try:
+                output_content = make_ascii_safe(output) if args.safe_output else output
+                with open(args.output, 'w', encoding='utf-8') as f:
+                    f.write(output_content)
+                print(f"Output saved successfully to: {args.output}")
+            except Exception as e:
+                print(f"Error saving to file: {e}", file=sys.stderr)
+                sys.exit(1)
+        else:
+            # Output to console (may have encoding issues on some Windows systems)
+            try:
+                if args.safe_output:
+                    # Use ASCII-safe output
+                    safe_output = make_ascii_safe(output)
+                    print(safe_output)
+                else:
+                    # Try direct print
+                    print(output)
+            except UnicodeEncodeError:
+                # Fallback to safe mode if encoding fails
+                print("Note: Using ASCII-safe output due to terminal encoding limitations", file=sys.stderr)
+                safe_output = make_ascii_safe(output)
+                print(safe_output)
 
     except json.JSONDecodeError as e:
         print(f"Error: Invalid JSON format in '{input_path}': {e}", file=sys.stderr)

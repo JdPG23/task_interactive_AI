@@ -19,7 +19,7 @@ Exemplos possíveis:
 - Contacte-nos hoje para marcar uma visita exclusiva.
 - Não perca esta oportunidade única!
 
-IMPORTANTE: Gere apenas o texto do call-to-action, SEM comillas, sem explicações adicionais ou pontuação extra.
+IMPORTANTE: Gere apenas o texto do call-to-action, SEM aspas, asteriscos ou qualquer formatação especial. Apenas texto simples.
 {% elif language == 'es' %}
 Genera un call-to-action corto y directo que incentive al usuario a dar el siguiente paso en la compra o alquiler de la propiedad.
 
@@ -41,7 +41,7 @@ Ejemplos posibles:
 - Contáctanos hoy para organizar una visita exclusiva.
 - ¡No pierdas esta oportunidad única!
 
-IMPORTANTE: Genera solo el texto del call-to-action, SIN comillas, sin explicaciones adicionales o puntuación extra.
+IMPORTANTE: Genera solo el texto del call-to-action, SIN comillas, asteriscos o cualquier formato especial. Solo texto simple.
 {% else %}
 Generate a short, direct call-to-action that encourages the user to take the next step in purchasing or renting the property.
 
@@ -63,5 +63,5 @@ Possible examples:
 - Contact us today to arrange an exclusive viewing.
 - Don't miss this unique opportunity!
 
-IMPORTANT: Generate only the call-to-action text, WITHOUT quotes, no additional explanations or extra punctuation.
+IMPORTANT: Generate only the call-to-action text, WITHOUT quotes, asterisks, or any special formatting. Output plain text only.
 {% endif %}

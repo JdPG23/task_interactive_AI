@@ -24,6 +24,8 @@ Exemplo de saída:
 <li>Quartos espaçosos com excelente iluminação natural</li>
 <li>Varanda privada perfeita para momentos de relaxamento</li>
 <li>Estacionamento privativo para máxima conveniência</li>
+
+IMPORTANTE: NÃO use aspas, asteriscos ou qualquer formatação especial na sua resposta. Apenas elementos HTML de lista.
 {% elif language == 'es' %}
 Genera una lista HTML de 3-5 características principales de alto impacto de la propiedad. Cada elemento debe ser conciso y persuasivo.
 
@@ -50,6 +52,8 @@ Ejemplo de salida:
 <li>Dormitorios espaciosos con excelente iluminación natural</li>
 <li>Balcón privado perfecto para momentos de relajación</li>
 <li>Aparcamiento privado para máxima comodidad</li>
+
+IMPORTANTE: NO uses comillas, asteriscos o cualquier formato especial en tu respuesta. Solo elementos HTML de lista.
 {% else %}
 Generate an HTML list of 3-5 key high-impact features of the property. Each item should be concise and persuasive.
 
@@ -76,4 +80,6 @@ Example output:
 <li>Spacious bedrooms with excellent natural lighting</li>
 <li>Private balcony perfect for relaxation moments</li>
 <li>Private parking for maximum convenience</li>
+
+IMPORTANT: Do NOT use quotes, asterisks, or any special formatting in your response. Output only HTML list items.
 {% endif %}

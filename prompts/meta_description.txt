@@ -11,7 +11,9 @@ Dados da propriedade:
 - Localização: {{ location.neighborhood }}, {{ location.city }}
 - País: {{ location.country }}
 
-A descrição deve incentivar cliques dos resultados de busca e usar linguagem benefit-oriented. Gere apenas a descrição, sem citações ou explicações.
+A descrição deve incentivar cliques dos resultados de busca e usar linguagem benefit-oriented. Gere apenas a descrição, sem explicações adicionais.
+
+IMPORTANTE: NÃO use aspas, asteriscos ou qualquer formatação especial na sua resposta. Apenas texto simples.
 {% elif language == 'es' %}
 Genera una descripción meta SEO-optimizada con máximo 155 caracteres. Debe ser persuasiva e incluir:
 - Número de dormitorios (ej: {{ features.bedrooms }} dormitorios)
@@ -25,7 +27,9 @@ Datos de la propiedad:
 - Ubicación: {{ location.neighborhood }}, {{ location.city }}
 - País: {{ location.country }}
 
-La descripción debe incentivar clics desde los resultados de búsqueda y usar lenguaje orientado a beneficios. Genera solo la descripción, sin comillas o explicaciones.
+La descripción debe incentivar clics desde los resultados de búsqueda y usar lenguaje orientado a beneficios. Genera solo la descripción, sin explicaciones adicionales.
+
+IMPORTANTE: NO uses comillas, asteriscos o cualquier formato especial en tu respuesta. Solo texto simple.
 {% else %}
 Generate an SEO-optimized meta description with maximum 155 characters. It should be compelling and include:
 - Bedroom count (e.g., {{ features.bedrooms }}-bedroom)
@@ -39,5 +43,7 @@ Property data:
 - Location: {{ location.neighborhood }}, {{ location.city }}
 - Country: {{ location.country }}
 
-The description should encourage clicks from search results and use benefit-oriented language. Generate only the description, no quotes or explanations.
+The description should encourage clicks from search results and use benefit-oriented language. Generate only the description, no additional explanations.
+
+IMPORTANT: Do NOT use quotes, asterisks, or any special formatting in your response. Output plain text only.
 {% endif %}
