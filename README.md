@@ -48,11 +48,17 @@ A sophisticated CLI tool that generates SEO-optimized, multilingual property lis
 
 ### Basic Usage
 
+**Generate content to console:**
 ```bash
-python main.py examples/sample_en_lisbon.json
+python main.py examples\sample_en_lisbon.json
 ```
 
-The tool will generate HTML-tagged content and output it to stdout. You can redirect it to a file:
+**Save output to HTML file:**
+```bash
+python main.py examples\sample_en_lisbon.json > output.html
+```
+
+The tool generates HTML-tagged content that you can save directly to an HTML file for immediate use in web pages or content management systems.
 
 ### Testing the System
 
@@ -101,7 +107,8 @@ python test_end_to_end.py
 ```
 
 ```bash
-python main.py property_data.json > output.html
+# Example: Save generated content to HTML file
+python main.py examples\sample_en_lisbon.json > property_listing.html
 ```
 
 ### Input JSON Format
