@@ -13,6 +13,7 @@ except ImportError:
     print("❌ python-dotenv not installed. Run: pip install python-dotenv")
     sys.exit(1)
 
+
 def test_env_loading():
     """Test if environment variables are loaded from .env file."""
     print("🔍 Testing .env file loading...")
@@ -54,6 +55,8 @@ def main():
         print("\n❌ Environment configuration needs fixing.")
         return False
 
+
 if __name__ == '__main__':
     success = main()
     sys.exit(0 if success else 1)
+

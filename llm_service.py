@@ -7,14 +7,18 @@ for generating property listing content.
 
 import sys
 import os
-import locale
+import io
 from typing import Optional
 
 # Force UTF-8 output for Windows
 if hasattr(sys.stdout, 'reconfigure'):
     try:
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-    except Exception:
+    except (AttributeError, io.UnsupportedOperation, RuntimeError) as e:
+        # Silently handle cases where stream reconfiguration fails
+        # - AttributeError: if reconfigure exists but is not callable
+        # - UnsupportedOperation: if the stream doesn't support reconfiguration
+        # - RuntimeError: if the stream is already closed or in an invalid state
         pass
 
 try:
@@ -105,50 +109,6 @@ class LLMService:
             print(f"Error: {error_msg}", file=sys.stderr)
             raise Exception(error_msg)
 
-    def _normalize_text(self, text: str) -> str:
-        """
-        Selectively normalize problematic Unicode characters while preserving Portuguese authenticity.
-        
-        Converts typographic characters (smart quotes, em dashes) that cause terminal issues
-        but preserves Portuguese accented characters (á, ã, é, ó, ç) for authenticity.
-        
-        Args:
-            text: Input text that may contain smart quotes and accented characters
-            
-        Returns:
-            Text with typographic issues fixed but Portuguese characters preserved
-        """
-        # Dictionary of problematic Unicode characters and their ASCII replacements
-        # SELECTIVE NORMALIZATION: Only convert problematic typographic characters
-        # but preserve essential Portuguese accented characters for authenticity
-        replacements = {
-            # Smart quotes (problematic in terminals)
-            '\u2018': "'",  # Left single quotation mark
-            '\u2019': "'",  # Right single quotation mark  
-            '\u201c': '"',  # Left double quotation mark
-            '\u201d': '"',  # Right double quotation mark
-            
-            # Dashes (problematic in terminals)
-            '\u2013': '-',  # En dash
-            '\u2014': '-',  # Em dash
-            
-            # Other typographic characters that cause terminal issues
-            '\u2026': '...',  # Horizontal ellipsis
-            '\u00a0': ' ',   # Non-breaking space
-            
-            # NOTE: Portuguese accented characters (ã, é, ó, ç, etc.) are preserved
-            # to maintain authenticity of Portuguese content like "São Jorge" and "Apolónia"  
-            # If you see garbled characters in terminal, use: python main.py --html > output.html
-            '\u20ac': 'EUR',  # Euro sign (€) - converted for wider compatibility
-        }
-        
-        # Apply replacements
-        normalized = text
-        for unicode_char, ascii_replacement in replacements.items():
-            normalized = normalized.replace(unicode_char, ascii_replacement)
-            
-        return normalized
-
     def test_connection(self) -> bool:
         """
         Test the API connection with a simple prompt.
@@ -162,3 +122,48 @@ class LLMService:
             return 'OK' in response.upper()
         except Exception:
             return False
+
+    @staticmethod
+    def _normalize_text(text: str) -> str:
+        """
+        Selectively normalize problematic Unicode characters while preserving Portuguese authenticity.
+
+        Converts typographic characters (smart quotes, em dashes) that cause terminal issues
+        but preserves Portuguese accented characters (á, ã, é, ó, ç) for authenticity.
+
+        Args:
+            text: Input text that may contain smart quotes and accented characters
+
+        Returns:
+            Text with typographic issues fixed but Portuguese characters preserved
+        """
+        # Dictionary of problematic Unicode characters and their ASCII replacements
+        # SELECTIVE NORMALIZATION: Only convert problematic typographic characters
+        # but preserve essential Portuguese accented characters for authenticity
+        replacements = {
+            # Smart quotes (problematic in terminals)
+            '\u2018': "'",  # Left single quotation mark
+            '\u2019': "'",  # Right single quotation mark
+            '\u201c': '"',  # Left double quotation mark
+            '\u201d': '"',  # Right double quotation mark
+
+            # Dashes (problematic in terminals)
+            '\u2013': '-',  # En dash
+            '\u2014': '-',  # Em dash
+
+            # Other typographic characters that cause terminal issues
+            '\u2026': '...',  # Horizontal ellipsis
+            '\u00a0': ' ',  # Non-breaking space
+
+            # NOTE: Portuguese accented characters (ã, é, ó, ç, etc.) are preserved
+            # to maintain authenticity of Portuguese content like "São Jorge" and "Apolónia"
+            # If you see garbled characters in terminal, use: python main.py --html > output.html
+            '\u20ac': 'EUR',  # Euro sign (€) - converted for wider compatibility
+        }
+
+        # Apply replacements
+        normalized = text
+        for unicode_char, ascii_replacement in replacements.items():
+            normalized = normalized.replace(unicode_char, ascii_replacement)
+
+        return normalized

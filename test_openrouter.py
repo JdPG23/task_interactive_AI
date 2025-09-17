@@ -5,7 +5,6 @@ Test script for OpenRouter + DeepSeek V3 integration
 
 import os
 import sys
-from pathlib import Path
 from llm_service import LLMService
 
 # Add current directory to path
@@ -95,6 +94,7 @@ def main():
     else:
         print("\n❌ Some tests FAILED. Check your API key and internet connection.")
         return False
+
 
 if __name__ == '__main__':
     success = main()

@@ -33,6 +33,9 @@ from llm_service import LLMService
 # Add current directory to path
 sys.path.insert(0, '.')
 
+# Global variable to store generated files for cleanup
+generated_files = []
+
 try:
     from dotenv import load_dotenv
     load_dotenv()
@@ -234,6 +237,7 @@ def test_output_quality():
 
 def test_multilingual_support():
     """Test 6: Test content generation in all 3 supported languages."""
+    global generated_files
     print("\n🧪 Test 6: Multilingual Support (EN, PT, ES)")
     print("-" * 30)
     
@@ -243,6 +247,7 @@ def test_multilingual_support():
         ('examples/sample_spanish_madrid.json', 'es', 'Spanish')
     ]
     
+    # Clear any previous generated files
     generated_files = []
     
     for json_file, lang_code, lang_name in test_files:
@@ -295,18 +300,17 @@ def test_multilingual_support():
             print(f"❌ {lang_name} test failed: {e}")
             return False
     
-    # Store generated files for cleanup
-    test_multilingual_support.generated_files = generated_files
     print("✅ All 3 languages tested successfully")
     return True
 
 
 def test_content_evaluator():
     """Test 7: Test content quality evaluation for all languages."""
+    global generated_files
     print("\n🧪 Test 7: Content Quality Evaluation")
     print("-" * 30)
     
-    if not hasattr(test_multilingual_support, 'generated_files'):
+    if not generated_files:
         print("❌ No generated files found. Run multilingual test first.")
         return False
     
@@ -316,7 +320,7 @@ def test_content_evaluator():
         
         overall_scores = []
         
-        for output_file, lang_code, lang_name in test_multilingual_support.generated_files:
+        for output_file, lang_code, lang_name in generated_files:
             if not Path(output_file).exists():
                 print(f"❌ {output_file} not found")
                 continue
@@ -368,12 +372,12 @@ def test_content_evaluator():
 
 def cleanup():
     """Clean up test files."""
+    global generated_files
     test_files = ['test_output.html']
     
     # Add multilingual test files if they exist
-    if hasattr(test_multilingual_support, 'generated_files'):
-        for output_file, _, _ in test_multilingual_support.generated_files:
-            test_files.append(output_file)
+    for output_file, _, _ in generated_files:
+        test_files.append(output_file)
     
     print("\n🧹 Cleaning up test files...")
     

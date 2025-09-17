@@ -8,8 +8,7 @@ of generated real estate content with guidelines.
 
 import re
 import sys
-from typing import Dict, List, Tuple
-from pathlib import Path
+from typing import Dict
 import argparse
 
 
@@ -42,7 +41,7 @@ class ContentEvaluator:
 
         # Character limits for each section
         self.limits = {
-            'title': 60,
+            'title': 70,
             'meta_description': 155,
             'description': (500, 700)  # range
         }
@@ -79,25 +78,6 @@ class ContentEvaluator:
             'total_words': len(words),
             'total_sentences': len(sentences)
         }
-
-    def _count_syllables(self, word: str) -> int:
-        """Count syllables in a word using a simple heuristic."""
-        word = word.lower()
-        vowels = 'aeiouy'
-        syllable_count = 0
-        prev_was_vowel = False
-        
-        for char in word:
-            is_vowel = char in vowels
-            if is_vowel and not prev_was_vowel:
-                syllable_count += 1
-            prev_was_vowel = is_vowel
-        
-        # Handle silent 'e'
-        if word.endswith('e') and syllable_count > 1:
-            syllable_count -= 1
-            
-        return max(1, syllable_count)
 
     def evaluate_seo_keywords(self, content: str, language: str) -> Dict[str, any]:
         """Evaluate SEO keyword presence and density."""
@@ -145,25 +125,6 @@ class ContentEvaluator:
         
         return results
 
-    def evaluate_structure_compliance(self, content: str) -> Dict[str, bool]:
-        """Check if all required HTML sections are present."""
-        required_sections = [
-            r'<title>.*?</title>',
-            r'<meta name="description".*?>',
-            r'<h1>.*?</h1>',
-            r'<section id="description">.*?</section>',
-            r'<ul id="key-features">.*?</ul>',
-            r'<section id="neighborhood">.*?</section>',
-            r'<p class="call-to-action">.*?</p>'
-        ]
-        
-        results = {}
-        for i, pattern in enumerate(required_sections, 1):
-            section_name = pattern.split('"')[1] if '"' in pattern else f"section_{i}"
-            results[section_name] = bool(re.search(pattern, content, re.DOTALL))
-        
-        return results
-
     def generate_report(self, content: str, language: str = 'en') -> Dict:
         """Generate a comprehensive evaluation report."""
         # Parse sections from content
@@ -187,7 +148,28 @@ class ContentEvaluator:
             'sections_found': len(sections)
         }
 
-    def _parse_sections(self, content: str) -> Dict[str, str]:
+    @staticmethod
+    def evaluate_structure_compliance(content: str) -> Dict[str, bool]:
+        """Check if all required HTML sections are present."""
+        required_sections = [
+            r'<title>.*?</title>',
+            r'<meta name="description".*?>',
+            r'<h1>.*?</h1>',
+            r'<section id="description">.*?</section>',
+            r'<ul id="key-features">.*?</ul>',
+            r'<section id="neighborhood">.*?</section>',
+            r'<p class="call-to-action">.*?</p>'
+        ]
+
+        results = {}
+        for i, pattern in enumerate(required_sections, 1):
+            section_name = pattern.split('"')[1] if '"' in pattern else f"section_{i}"
+            results[section_name] = bool(re.search(pattern, content, re.DOTALL))
+
+        return results
+
+    @staticmethod
+    def _parse_sections(content: str) -> Dict[str, str]:
         """Parse HTML sections from content."""
         sections = {}
         
@@ -208,7 +190,8 @@ class ContentEvaluator:
         
         return sections
 
-    def _calculate_overall_score(self, readability, seo, limits, structure) -> int:
+    @staticmethod
+    def _calculate_overall_score(readability, seo, limits, structure) -> int:
         """Calculate overall quality score (0-100)."""
         score = 0
         
@@ -237,6 +220,26 @@ class ContentEvaluator:
             score += (compliant_structure / total_structure) * 20
         
         return min(100, int(score))
+
+    @staticmethod
+    def _count_syllables(word: str) -> int:
+        """Count syllables in a word using a simple heuristic."""
+        word = word.lower()
+        vowels = 'aeiouy'
+        syllable_count = 0
+        prev_was_vowel = False
+
+        for char in word:
+            is_vowel = char in vowels
+            if is_vowel and not prev_was_vowel:
+                syllable_count += 1
+            prev_was_vowel = is_vowel
+
+        # Handle silent 'e'
+        if word.endswith('e') and syllable_count > 1:
+            syllable_count -= 1
+
+        return max(1, syllable_count)
 
 
 def main():

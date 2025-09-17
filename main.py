@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
+import io
 
 # Basic UTF-8 configuration for console output
 if hasattr(sys.stdout, 'reconfigure'):
     try:
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
         sys.stderr.reconfigure(encoding='utf-8', errors='replace')
-    except Exception:
+    except (AttributeError, io.UnsupportedOperation, RuntimeError) as e:
+        # Silently handle cases where stream reconfiguration fails
+        # - AttributeError: if reconfigure exists but is not callable
+        # - UnsupportedOperation: if the stream doesn't support reconfiguration
+        # - RuntimeError: if the stream is already closed or in an invalid state
         pass
+
 """
 AI-Powered Real Estate Content Generator
 
@@ -58,37 +64,6 @@ class RealEstateContentGenerator:
             self.llm_service = None
         self.template_env = Environment(loader=FileSystemLoader('prompts'))
 
-    def validate_json_input(self, data: Dict[str, Any]) -> bool:
-        """
-        Validate that the input JSON contains all required keys.
-
-        Required keys: location, features, price, language
-        Optional keys: tone
-        """
-        required_keys = ['location', 'features', 'price', 'language']
-
-        for key in required_keys:
-            if key not in data:
-                print(f"Error: Missing required key '{key}' in input JSON", file=sys.stderr)
-                return False
-
-        # Validate language field
-        if data['language'] not in ['en', 'pt', 'es']:
-            print(f"Error: Language must be 'en', 'pt', or 'es', got '{data['language']}'", file=sys.stderr)
-            return False
-
-        # Validate tone field (optional)
-        valid_tones = ['formal', 'friendly', 'luxury', 'investor']
-        if 'tone' in data and data['tone'] not in valid_tones:
-            print(f"Error: Tone must be one of {valid_tones}, got '{data['tone']}'", file=sys.stderr)
-            return False
-
-        # Set default tone if not provided
-        if 'tone' not in data:
-            data['tone'] = 'friendly'
-
-        return True
-
     def generate_section(self, section_name: str, data: Dict[str, Any]) -> str:
         """
         Generate content for a specific section using LLM.
@@ -118,22 +93,6 @@ class RealEstateContentGenerator:
         except Exception as e:
             print(f"Error generating {section_name}: {e}", file=sys.stderr)
             return ""
-
-    def wrap_in_html_tags(self, section_name: str, content: str) -> str:
-        """
-        Wrap generated content in the appropriate HTML tags for each section.
-        """
-        tag_mapping = {
-            'title': f'<title>{content}</title>',
-            'meta_description': f'<meta name="description" content="{content}">',
-            'h1': f'<h1>{content}</h1>',
-            'description': f'<section id="description">{content}</section>',
-            'key_features': f'<ul id="key-features">{content}</ul>',
-            'neighborhood': f'<section id="neighborhood">{content}</section>',
-            'call_to_action': f'<p class="call-to-action">{content}</p>'
-        }
-
-        return tag_mapping.get(section_name, content)
 
     def generate_full_content(self, data: Dict[str, Any]) -> str:
         """
@@ -174,17 +133,66 @@ class RealEstateContentGenerator:
         content = self.generate_full_content(data)
         
         html_template = f"""<!DOCTYPE html>
-<html lang="{data.get('language', 'en')}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {content}
-</head>
-<body>
-    <!-- Content is in the head for SEO optimization -->
-</body>
-</html>"""
+            <html lang="{data.get('language', 'en')}">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                {content}
+            </head>
+            <body>
+                <!-- Content is in the head for SEO optimization -->
+            </body>
+            </html>"""
         return html_template
+
+    @staticmethod
+    def wrap_in_html_tags(section_name: str, content: str) -> str:
+        """
+        Wrap generated content in the appropriate HTML tags for each section.
+        """
+        tag_mapping = {
+            'title': f'<title>{content}</title>',
+            'meta_description': f'<meta name="description" content="{content}">',
+            'h1': f'<h1>{content}</h1>',
+            'description': f'<section id="description">{content}</section>',
+            'key_features': f'<ul id="key-features">{content}</ul>',
+            'neighborhood': f'<section id="neighborhood">{content}</section>',
+            'call_to_action': f'<p class="call-to-action">{content}</p>'
+        }
+
+        return tag_mapping.get(section_name, content)
+
+    @staticmethod
+    def validate_json_input(data: Dict[str, Any]) -> bool:
+        """
+        Validate that the input JSON contains all required keys.
+
+        Required keys: location, features, price, language
+        Optional keys: tone
+        """
+        required_keys = ['location', 'features', 'price', 'language']
+
+        for key in required_keys:
+            if key not in data:
+                print(f"Error: Missing required key '{key}' in input JSON", file=sys.stderr)
+                return False
+
+        # Validate language field
+        if data['language'] not in ['en', 'pt', 'es']:
+            print(f"Error: Language must be 'en', 'pt', or 'es', got '{data['language']}'", file=sys.stderr)
+            return False
+
+        # Validate tone field (optional)
+        valid_tones = ['formal', 'friendly', 'luxury', 'investor']
+        if 'tone' in data and data['tone'] not in valid_tones:
+            print(f"Error: Tone must be one of {valid_tones}, got '{data['tone']}'", file=sys.stderr)
+            return False
+
+        # Set default tone if not provided
+        if 'tone' not in data:
+            data['tone'] = 'friendly'
+
+        return True
 
 
 def main():
@@ -193,13 +201,13 @@ def main():
         description='Generate SEO-optimized real estate property listings from JSON data',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Examples:
-  python main.py property_data.json
-  python main.py /path/to/input.json
-
-The JSON file must contain: location, features, price, and language fields.
-Language must be 'en' for English or 'pt' for Portuguese.
-        """
+            Examples:
+              python main.py property_data.json
+              python main.py /path/to/input.json
+            
+            The JSON file must contain: location, features, price, and language fields.
+            Language must be 'en' for English or 'pt' for Portuguese.
+            """
     )
 
     parser.add_argument(
@@ -217,7 +225,8 @@ Language must be 'en' for English or 'pt' for Portuguese.
     parser.add_argument(
         '--safe-output',
         action='store_true',
-        help='Use ASCII-safe output mode for terminals with encoding issues (converts accented characters to alternatives)'
+        help='Use ASCII-safe output mode for terminals with encoding issues (converts accented characters to '
+             'alternatives)'
     )
     
     parser.add_argument(
@@ -294,7 +303,8 @@ Language must be 'en' for English or 'pt' for Portuguese.
                     readability = report['readability']
                     print(f"  📖 Readability:", file=sys.stderr)
                     print(f"    • Flesch Score: {readability.get('flesch_score', 0):.1f}/100", file=sys.stderr)
-                    print(f"    • Avg Words/Sentence: {readability.get('avg_words_per_sentence', 0):.1f}", file=sys.stderr)
+                    print(f"    • Avg Words/Sentence: {readability.get('avg_words_per_sentence', 0):.1f}",
+                          file=sys.stderr)
                     print(f"    • Total Words: {readability.get('total_words', 0)}", file=sys.stderr)
                 
                 # SEO evaluation
@@ -337,7 +347,7 @@ Language must be 'en' for English or 'pt' for Portuguese.
                 
                 print("="*50, file=sys.stderr)
                 
-            except ImportError:
+            except (ImportError, NameError):
                 print("⚠️  Content evaluator not available. Install required dependencies.", file=sys.stderr)
             except Exception as e:
                 print(f"⚠️  Evaluation failed: {e}", file=sys.stderr)
