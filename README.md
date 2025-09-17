@@ -119,10 +119,10 @@ python test_end_to_end.py
 #### **Quick Setup & Test**
 ```bash
 # Linux/Mac
-./setup_openrouter.sh
+./setup.sh
 
 # Windows
-setup_openrouter.bat
+setup.bat
 
 # Then run end-to-end test
 python test_end_to_end.py

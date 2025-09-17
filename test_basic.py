@@ -47,7 +47,7 @@ def test_json_validation():
         "location": {"neighborhood": "Test", "city": "Test", "country": "Test"},
         "features": {"bedrooms": 2, "area": 100},
         "price": 300000,
-        "language": "es"
+        "language": "fr"  # French is not supported (only en, pt, es are valid)
     }
 
     assert not generator.validate_json_input(invalid_lang_data), "Invalid language should fail validation"
